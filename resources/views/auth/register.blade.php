@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout title="Register">
     <div class="flex flex-col items-center">
         <form action="{{ route('register') }}" method="POST" class="card card-border bg-base-100 shadow-sm w-xl py-6">
             @csrf
@@ -26,10 +26,10 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary bg-custom-primary border-0 shadow-none text-white">Register</button>
 
                 <div class="mt-3">
-                    <p class="text-center">Sudah punya akun? <a href="{{ route('show.login') }}" class="text-primary">Login</a></p>
+                    <p class="text-center">Sudah punya akun? <a href="{{ route('show.login') }}" class="text-custom-primary">Login</a></p>
                 </div>
 
                 @if ($errors->any())
@@ -42,4 +42,4 @@
             </div>
         </form>
     </div>
-</x-layout>
+</x-layouts.layout>

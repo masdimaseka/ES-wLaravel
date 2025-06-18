@@ -35,7 +35,7 @@
 
             @auth
                 <div class="flex lg:items-center gap-2">
-                    <a href="{{ route('show.login') }}" class="btn btn-primary bg-custom-primary border-0 shadow-none">
+                    <a href="{{ route('show.form-diagnosa') }}" class="btn btn-primary bg-custom-primary border-0 shadow-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
                             <path fill="#fff"
                                 d="M18.5 21.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-2 13a2 2 0 1 0 0-4a2 2 0 0 0 0 4M6 12.25A6.25 6.25 0 0 1 12.25 6h23.5A6.25 6.25 0 0 1 42 12.25v23.5A6.25 6.25 0 0 1 35.75 42h-23.5A6.25 6.25 0 0 1 6 35.75zm15 9.25a4.5 4.5 0 1 0-9 0a4.5 4.5 0 0 0 9 0M16.5 37a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9m-3.25-26a1.25 1.25 0 1 0 0 2.5h21.5a1.25 1.25 0 1 0 0-2.5zM23 21.75c0 .69.56 1.25 1.25 1.25h10.5a1.25 1.25 0 1 0 0-2.5h-10.5c-.69 0-1.25.56-1.25 1.25M24.25 31a1.25 1.25 0 1 0 0 2.5h10.5a1.25 1.25 0 1 0 0-2.5z" />
@@ -102,7 +102,7 @@
 
                 @auth
                     <div class="flex flex-col gap-2">
-                        <a href="{{ route('show.login') }}" class="btn w-full btn-primary bg-custom-primary border-0 shadow-none">
+                        <a href="{{ route('show.form-diagnosa') }}" class="btn w-full btn-primary bg-custom-primary border-0 shadow-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
                                 <path fill="#fff"
                                     d="M18.5 21.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-2 13a2 2 0 1 0 0-4a2 2 0 0 0 0 4M6 12.25A6.25 6.25 0 0 1 12.25 6h23.5A6.25 6.25 0 0 1 42 12.25v23.5A6.25 6.25 0 0 1 35.75 42h-23.5A6.25 6.25 0 0 1 6 35.75zm15 9.25a4.5 4.5 0 1 0-9 0a4.5 4.5 0 0 0 9 0M16.5 37a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9m-3.25-26a1.25 1.25 0 1 0 0 2.5h21.5a1.25 1.25 0 1 0 0-2.5zM23 21.75c0 .69.56 1.25 1.25 1.25h10.5a1.25 1.25 0 1 0 0-2.5h-10.5c-.69 0-1.25.56-1.25 1.25M24.25 31a1.25 1.25 0 1 0 0 2.5h10.5a1.25 1.25 0 1 0 0-2.5z" />

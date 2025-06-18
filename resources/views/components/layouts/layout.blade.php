@@ -9,7 +9,7 @@
     @vite('resources/css/app.css')
 </head>
 
-<body>
+<body class="bg-custom-bg min-h-screen">
     @if (session('success'))
         <div id="flash" class="p-4 text-center bg-green-50 text-green-500 font-bold">
             {{ session('success') }}

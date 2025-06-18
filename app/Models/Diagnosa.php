@@ -10,5 +10,5 @@ class Diagnosa extends Model
     use HasFactory;
     protected $table = 'diagnosa';
     protected $guard = ["id"];
-    protected $fillable = ["diagnosa_id", "data_diagnosa", "kondisi"];
+    protected $fillable = ["diagnosa_id", "data_diagnosa", "kondisi", "user_id"];
 }

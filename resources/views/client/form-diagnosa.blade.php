@@ -2,9 +2,8 @@
     <h1 class="text-3xl font-bold mb-2">Lakukan Diagnosa!</h1>
     <p class="mb-4">pastikan untuk memberikan jawaban yang tepat sesuai dengan pengalamanmu.</p>
 
-    {{-- @dd($gejala, $opsi) --}}
 
-    <div class="p-8 bg-white">
+    <div class="p-8 bg-white border border-gray-300 rounded-lg">
         <form action="{{ route('store.form-diagnosa') }}" method="post">
             @csrf
 
@@ -14,11 +13,11 @@
                     <table class="w-full table-auto">
                         <tr class="flex gap-2">
                             <td>{{ $loop->iteration }}.</td>
-                            <td>Apakah anda merasa {{ $item->nama_gejala }}?</td>
+                            <td>{{ $item->nama_gejala }}?</td>
                         </tr>
                     </table>
 
-                    <select name="opsi[{{ $item->kode_gejala }}]" class="select" required>
+                    <select name="opsi[{{ $item->kode_gejala }}]" class="select">
                         <option disabled selected value="">Pilih Jawaban</option>
                         @foreach ($opsi as $opsiJawaban)
                             <option value="{{ $opsiJawaban->nilai ?? '' }}">
@@ -30,7 +29,7 @@
             @endforeach
 
             <button
-                class="btn btn-primary bg-custom-primary text-white border-0 shadow-none mt-8 w-full lg:w-fit lg:px-12"
+                class="btn btn-primary bg-custom-primary text-white border-0 shadow-none mt-4 w-full lg:w-fit lg:px-12"
                 type="submit">Submit</button>
         </form>
     </div>

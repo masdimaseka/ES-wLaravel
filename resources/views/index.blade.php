@@ -8,7 +8,7 @@
           Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
           quasi. In deleniti eaque aut repudiandae et a id nisi.
         </p>
-        <button class="btn btn-primary bg-custom-primary border-0 shadow-none">Diagnosa</button>
+        <a href="{{ route('show.form-diagnosa') }}" class="btn btn-primary bg-custom-primary border-0 shadow-none">Diagnosa</a>
       </div>
     </div>
   </div>

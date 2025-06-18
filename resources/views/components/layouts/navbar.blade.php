@@ -13,10 +13,10 @@
                 <a href="{{ route('index') }}">
                     <p>HOME</p>
                 </a>
-                <a href="{{ route('index') }}">
+                <a href="{{ route('show.disc') }}">
                     <p>KENALI DISC</p>
                 </a>
-                <a href="{{ route('show.login') }}">
+                <a href="{{ route('show.about') }}">
                     <p>ABOUT</p>
                 </a>
             </div>
@@ -55,7 +55,7 @@
                             </span>
                         </summary>
                         <div class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm gap-2">
-                            <a class="btn">Dashboard</a>
+                            <a href="{{ route('show.user-diagnosa') }}" class="btn">Dashboard</a>
                             <form action="{{ route('logout') }}" method="POST" class="w-full">
                                 @csrf
                                 <button class="btn btn-error text-white w-full">Log Out</button>
@@ -80,10 +80,10 @@
                     <a href="{{ route('index') }}" class="btn w-full">
                         <p>HOME</p>
                     </a>
-                    <a href="{{ route('index') }}" class="btn w-full">
+                    <a href="{{ route('show.disc') }}" class="btn w-full">
                         <p>KENALI DISC</p>
                     </a>
-                    <a href="{{ route('show.login') }}" class="btn w-full">
+                    <a href="{{ route('show.about') }}" class="btn w-full">
                         <p>ABOUT</p>
                     </a>
                 </div>
@@ -123,7 +123,7 @@
                                 </span>
                             </summary>
                             <div class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm gap-2">
-                                <a class="btn">Dashboard</a>
+                                <a href="{{ route('show.user-diagnosa') }}" class="btn">Dashboard</a>
                                 <form action="{{ route('logout') }}" method="POST" class="w-full">
                                     @csrf
                                     <button class="btn btn-error text-white w-full">Log Out</button>

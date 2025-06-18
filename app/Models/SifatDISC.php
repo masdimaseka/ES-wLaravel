@@ -10,5 +10,5 @@ class SifatDISC extends Model
     use HasFactory;
     protected $table = 'sifat_disc';
     protected $guard = ["id"];
-    protected $fillable = ["kode_sifat", "nama_sifat"];
+    protected $fillable = ["kode_sifat", "nama_sifat", "desc"];
 }

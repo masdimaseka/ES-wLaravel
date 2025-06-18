@@ -6,15 +6,15 @@ use App\Models\Diagnosa;
 use App\Models\Keputusan;
 use App\Models\SifatDISC;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class DiagnosaController extends Controller
 {
-    const NILAI_TIDAK_DIISI = "#";
+    const NILAI_TIDAK_DIISI = '#';
 
     public function store(Request $request)
     {
-
         $filteredArray = $request->post('opsi');
         $opsi = array_filter($filteredArray, fn($value) => $value !== null);
 
@@ -36,17 +36,16 @@ class DiagnosaController extends Controller
         $hasilDiagnosa = [];
 
         foreach ($discList as $disc) {
-            $rules = Keputusan::whereIn("kode_gejala", $kodeGejala)
-                        ->where("kode_sifat", $disc->kode_sifat)
-                        ->get();
+            $rules = Keputusan::whereIn('kode_gejala', $kodeGejala)->where('kode_sifat', $disc->kode_sifat)->get();
 
-            if ($rules->isEmpty()) continue;
+            if ($rules->isEmpty()) {
+                continue;
+            }
 
             $cfValues = [];
             foreach ($rules as $rule) {
                 $cfPakar = $rule->mb - $rule->md;
-                $cfUser = collect($bobotPilihan)
-                    ->first(fn($item) => $item[0] === $rule->kode_gejala)[1] ?? 0;
+                $cfUser = collect($bobotPilihan)->first(fn($item) => $item[0] === $rule->kode_gejala)[1] ?? 0;
 
                 $cfValues[] = $cfPakar * $cfUser;
             }
@@ -55,7 +54,7 @@ class DiagnosaController extends Controller
 
             $hasilDiagnosa[] = [
                 'kode_sifat' => $disc->kode_sifat,
-                'value' => $cfCombined
+                'value' => $cfCombined,
             ];
         }
 
@@ -64,7 +63,8 @@ class DiagnosaController extends Controller
         Diagnosa::create([
             'diagnosa_id' => $diagnosa_id,
             'data_diagnosa' => json_encode($hasilDiagnosa),
-            'kondisi' => json_encode($bobotPilihan)
+            'kondisi' => json_encode($bobotPilihan),
+            'user_id' => Auth::id(),
         ]);
 
         return redirect()->route('show.result-diagnosa', compact('diagnosa_id'));
@@ -72,11 +72,13 @@ class DiagnosaController extends Controller
 
     private function combineCfValues(array $cfValues): float
     {
-        if (empty($cfValues)) return 0;
+        if (empty($cfValues)) {
+            return 0;
+        }
         $cfCombined = $cfValues[0];
 
         for ($i = 1; $i < count($cfValues); $i++) {
-            $cfCombined = $cfCombined + ($cfValues[$i] * (1 - $cfCombined));
+            $cfCombined = $cfCombined + $cfValues[$i] * (1 - $cfCombined);
         }
 
         return round($cfCombined, 4);
@@ -88,7 +90,7 @@ class DiagnosaController extends Controller
             return [
                 'cf' => [],
                 'kode_sifat' => $kode_sifat,
-                'error' => 'Jumlah data pakar dan user tidak sama'
+                'error' => 'Jumlah data pakar dan user tidak sama',
             ];
         }
 
@@ -99,7 +101,7 @@ class DiagnosaController extends Controller
 
         return [
             'cf' => $cfCombined,
-            'kode_sifat' => $kode_sifat
+            'kode_sifat' => $kode_sifat,
         ];
     }
 
@@ -113,65 +115,73 @@ class DiagnosaController extends Controller
         $diagnosaTerpilih = null;
 
         foreach ($dataDiagnosa as $item) {
-            if (floatval($item["value"]) > $cfMax) {
-                $cfMax = floatval($item["value"]);
-                $diagnosaTerpilih = SifatDISC::where("kode_sifat", $item["kode_sifat"])->first();
+            if (floatval($item['value']) > $cfMax) {
+                $cfMax = floatval($item['value']);
+                $diagnosaTerpilih = SifatDISC::where('kode_sifat', $item['kode_sifat'])->first();
             }
         }
 
         if (!$diagnosaTerpilih) {
             return view('client.result-diagnosa', [
-                "diagnosa" => $diagnosa,
-                "diagnosa_dipilih" => null,
-                "gejala" => $gejalaUser,
-                "data_diagnosa" => $dataDiagnosa,
-                "pakar" => [],
-                "gejala_by_user" => [],
-                "cf_kombinasi" => [],
-                "hasil" => [],
-                "message" => "Tidak dapat menentukan tingkat depresi karena nilai kepastian sangat rendah atau tidak cukup data."
+                'diagnosa' => $diagnosa,
+                'diagnosa_dipilih' => null,
+                'gejala' => $gejalaUser,
+                'data_diagnosa' => $dataDiagnosa,
+                'pakar' => [],
+                'gejala_by_user' => [],
+                'cf_kombinasi' => [],
+                'hasil' => [],
+                'message' => 'Tidak dapat menentukan tingkat depresi karena nilai kepastian sangat rendah atau tidak cukup data.',
             ]);
-            
         }
 
         $kodeGejalaUser = collect($gejalaUser)->pluck(0)->toArray();
 
-        $pakar = Keputusan::whereIn("kode_gejala", $kodeGejalaUser)
-                    ->where("kode_sifat", $diagnosaTerpilih->kode_sifat)
-                    ->get();
+        $pakar = Keputusan::whereIn('kode_gejala', $kodeGejalaUser)->where('kode_sifat', $diagnosaTerpilih->kode_sifat)->get();
 
-        $gejalaByUser = collect($pakar)->map(function ($rule) use ($gejalaUser) {
-            foreach ($gejalaUser as $userGejala) {
-                if ($userGejala[0] === $rule->kode_gejala) {
-                    return $userGejala;
+        $gejalaByUser = collect($pakar)
+            ->map(function ($rule) use ($gejalaUser) {
+                foreach ($gejalaUser as $userGejala) {
+                    if ($userGejala[0] === $rule->kode_gejala) {
+                        return $userGejala;
+                    }
                 }
-            }
-            return null;
-        })->filter()->values()->toArray();
+                return null;
+            })
+            ->filter()
+            ->values()
+            ->toArray();
 
         $nilaiPakar = $pakar->map(fn($item) => $item->mb - $item->md)->toArray();
         $nilaiUser = array_map(fn($item) => $item[1], $gejalaByUser);
 
         $cfKombinasi = $this->getCfCombinasi($nilaiPakar, $nilaiUser, $diagnosaTerpilih->kode_sifat);
         $hasil = [
-            'value' => $this->combineCfValues($cfKombinasi["cf"]),
-            'kode_sifat' => $diagnosaTerpilih->kode_sifat
+            'value' => $this->combineCfValues($cfKombinasi['cf']),
+            'kode_sifat' => $diagnosaTerpilih->kode_sifat,
         ];
 
-
         return view('client.result-diagnosa', [
-            "diagnosa" => $diagnosa,
-            "diagnosa_dipilih" => [
+            'diagnosa' => $diagnosa,
+            'diagnosa_dipilih' => [
                 'value' => $cfMax,
-                'kode_sifat' => $diagnosaTerpilih
+                'kode_sifat' => $diagnosaTerpilih,
             ],
-            "gejala" => $gejalaUser,
-            "data_diagnosa" => $dataDiagnosa,
-            "pakar" => $pakar,
-            "gejala_by_user" => $gejalaByUser,
-            "cf_kombinasi" => $cfKombinasi,
-            "hasil" => $hasil,
+            'gejala' => $gejalaUser,
+            'data_diagnosa' => $dataDiagnosa,
+            'pakar' => $pakar,
+            'gejala_by_user' => $gejalaByUser,
+            'cf_kombinasi' => $cfKombinasi,
+            'hasil' => $hasil,
         ]);
     }
 
+    public function getDataDiagnosa()
+    {
+        $user = Auth::user();
+
+        $dataDiagnosa = Diagnosa::where('user_id', $user->id)->get();
+
+        return view('client.user-diagnosa', compact('dataDiagnosa'));
+    }
 }

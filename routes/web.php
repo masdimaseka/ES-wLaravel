@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DiagnosaController;
+use App\Http\Controllers\DiscController;
+use App\Http\Middleware\RoleMiddleware;
 use App\Models\Gejala;
 use App\Models\KondisiUser;
 use Illuminate\Support\Facades\Route;
@@ -11,28 +14,34 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::middleware('guest')->controller(AuthController::class)->group(function () {
-    Route::get('/register', 'showRegister')->name('show.register');
-    Route::get('/login', 'showLogin')->name('show.login');
-    Route::post('/register', 'register')->name('register');
-    Route::post('/login', 'login')->name('login');
-});
+Route::get('/disc', [DiscController::class, 'index'])->name('show.disc');
+Route::get('/about', [AboutController::class, 'index'])->name('show.about');
+
+Route::middleware('guest')
+    ->controller(AuthController::class)
+    ->group(function () {
+        Route::get('/register', 'showRegister')->name('show.register');
+        Route::get('/login', 'showLogin')->name('show.login');
+        Route::post('/register', 'register')->name('register');
+        Route::post('/login', 'login')->name('login');
+    });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
-
     Route::get('/form-diagnosa', function () {
         $data = [
             'gejala' => Gejala::all(),
-            'opsi' => KondisiUser::all()
+            'opsi' => KondisiUser::all(),
         ];
         return view('client.form-diagnosa', $data);
     })->name('show.form-diagnosa');
     Route::post('/form-diagnosa', [DiagnosaController::class, 'store'])->name('store.form-diagnosa');
     Route::get('/result-diagnosa/{diagnosa_id}', [DiagnosaController::class, 'diagnosaResult'])->name('show.result-diagnosa');
 
-    Route::middleware(\App\Http\Middleware\RoleMiddleware::class . ':admin')->group(function () {
+    Route::get('/user/diagnosa', [DiagnosaController::class, 'getDataDiagnosa'])->name('show.user-diagnosa');
+
+    Route::middleware(RoleMiddleware::class . ':admin')->group(function () {
         Route::get('/admin/dashboard', function () {
             return 'Halo Admin!';
         });

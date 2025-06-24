@@ -10,17 +10,34 @@
 </head>
 
 <body class="bg-custom-bg min-h-screen">
-    @if (session('success'))
-        <div id="flash" class="p-4 text-center bg-green-50 text-green-500 font-bold">
-            {{ session('success') }}
-        </div>
+    <x-layouts.navbar />
+
+
+    @if (request()->is('admin/*'))
+        <main class="container px-8 lg:px-16 py-28 mx-auto">
+
+            @if (session('success'))
+                <div id="flash" class="p-4 my-4 text-center bg-green-50 text-green-500 font-bold">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <x-layouts.sidebar />
+
+            {{ $slot }}
+        </main>
+    @else
+        <main class="container px-8 lg:px-16 py-28 mx-auto">
+
+            @if (session('success'))
+                <div id="flash" class="p-4 text-center bg-green-50 text-green-500 font-bold">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            {{ $slot }}
+        </main>
     @endif
-
-    <x-layouts.navbar/>
-
-    <main class="container px-8 lg:px-16 py-28 mx-auto">
-        {{ $slot }}
-    </main>
 
 </body>
 

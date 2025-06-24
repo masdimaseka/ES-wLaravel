@@ -10,13 +10,16 @@ class Keputusan extends Model
     use HasFactory;
     protected $table = 'keputusan';
     protected $guard = ["id"];
+    protected $fillable = ['kode_gejala', 'kode_sifat', 'mb', 'md'];
 
     public function sifat()
     {
-        return $this->hasMany(SifatDISC::class, 'kode_sifat', 'kode_sifat');
+        return $this->belongsTo(SifatDISC::class, 'kode_sifat', 'kode_sifat');
     }
     public function gejala()
     {
-        return $this->hasMany(Gejala::class, 'kode_gejala', 'kode_gejala');
+        return $this->belongsTo(Gejala::class, 'kode_gejala', 'kode_gejala');
     }
+
+
 }

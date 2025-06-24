@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DiagnosaController;
 use App\Http\Controllers\DiscController;
@@ -42,8 +43,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/diagnosa', [DiagnosaController::class, 'getDataDiagnosa'])->name('show.user-diagnosa');
 
     Route::middleware(RoleMiddleware::class . ':admin')->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return 'Halo Admin!';
-        });
+        Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('show.admin-dashboard');
+        Route::get('/admin/gejala', [AdminController::class, 'getDataGejala'])->name('show.admin-gejala');
+        Route::get('/admin/keputusan', [AdminController::class, 'getDataKeputusan'])->name('show.admin-keputusan');
+        Route::get('/admin/diagnosa', [AdminController::class, 'getDataDiagnosa'])->name('show.admin-diagnosa');
+        
+        Route::get('/admin/gejala/create', [AdminController::class, 'createDataGejala'])->name('create.admin-gejala');
+        Route::post('/admin/gejala/create', [AdminController::class, 'storeDataGejala'])->name('store.admin-gejala');
+        Route::delete('/admin/gejala/{id}/delete', [AdminController::class, 'destroyDataGejala'])->name('delete.admin-gejala');
+
+        Route::get('/admin/keputusan/create', [AdminController::class, 'createDataKeputusan'])->name('create.admin-keputusan');
+        Route::post('/admin/keputusan/create', [AdminController::class, 'storeDataKeputusan'])->name('store.admin-keputusan');
+        Route::delete('/admin/keputusan/{id}/delete', [AdminController::class, 'destroyDataKeputusan'])->name('delete.admin-keputusan');
     });
 });
